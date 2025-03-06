@@ -1,6 +1,5 @@
 import { View, Text, StyleSheet, FlatList } from 'react-native'
 import React, { useState, useEffect } from 'react';
-const ayahData = require('./ayah.json');
 
 
 const ReadQuran = () => {
@@ -8,17 +7,29 @@ const ReadQuran = () => {
     // State to store the ayah data
     const [data, setData] = useState([]);
 
+    const getQuranFromApiAsync = async () => {
+        try {
+          const response = await fetch(
+            'https://api.alquran.cloud/v1/quran/en.asad',
+          );
+          const json = await response.json();
+          setData(json.data.surahs);
+        } catch (error) {
+          console.error(error);
+        }
+      };    
+      
     // Load data on component mount
     useEffect(() => {
-        setData(ayahData); // Assuming ayahData is an array
+        getQuranFromApiAsync();
     }, []);
 
     return (
         <View>
             <FlatList
                 data={data}
-                renderItem={Item}
-                keyExtractor={item => item.Id}
+                renderItem={({item}) => <Item item={item} />}
+                keyExtractor={item => item.number}
             />
         </View>
     )
@@ -32,20 +43,20 @@ const Item = ({ item }) => (
             <View style={{ backgroundColor: 'white', flex: 0.70, flexDirection: 'row' }}>
 
                 <View style={styles.Translation}>
-                    <Text style={{ color: 'black', fontWeight: '600', textAlign: 'right' }}>{item.Translation}</Text>
+                    <Text style={{ color: 'black', fontWeight: '600', textAlign: 'right' }}>{item.name}</Text>
                 </View>
 
                 <View style={styles.Arabic}>
-                    <Text style={{ color: 'black', fontWeight: '700', textAlign: 'right' }}>{item.AyahTextMuhammadi}</Text>
+                    <Text style={{ color: 'black', fontWeight: '700', textAlign: 'right' }}>{item.englishName}</Text>
                 </View>
 
             </View>
 
             <View style={styles.ParahRakuh}>
-                <Text style={{ color: '#696969' }}>پارہ {item.ParahNumber} سورةرکوع {item.SurahNumber}</Text>
+                <Text style={{ color: '#696969' }}> سورة {item.number}</Text>
             </View>
         </View>
-        <View style={styles.Tafseer}>
+       {/* <View style={styles.Tafseer}>
             <Text style={{
                 padding: 10,
                 textAlign: 'center',
@@ -53,9 +64,13 @@ const Item = ({ item }) => (
                 lineHeight: 25
             }}>{item.Tafseer}</Text>
         </View>
+        */}
 
     </View>
 )
+
+
+
 const styles = StyleSheet.create({
     item: {
         flex: 1,
