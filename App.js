@@ -3,6 +3,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import HomeScreen from './screens/HomeScreen';
 import ReadQuran from './screens/ReadQuran';
+import SurahScreen from './screens/SurahScreen';
 
 
 
@@ -30,6 +31,14 @@ const StackNavigator = ()=>(
   <Stack.Screen
    name="Read Quran"
    component={ReadQuran}
+   options={{headerTitle:"Surahs"}}
+  />
+   <Stack.Screen
+   name="Surah Screen"
+   component={SurahScreen}
+   options={{headerTintColor: 'indigo',
+    headerTitleStyle: { fontWeight: 'bold', fontSize: 20 }
+   }}
   />
 </Stack.Navigator>
 )
