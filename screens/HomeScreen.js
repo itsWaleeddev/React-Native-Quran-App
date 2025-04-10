@@ -1,10 +1,53 @@
-import React from 'react'
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect} from 'react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import AsyncStorage from '@react-native-async-storage/async-storage'; // Import AsyncStorage
+
+
+
+useEffect(() => {
+  const getLastReadingPosition = async () => {
+    try {
+      const lastReadingPosition = await AsyncStorage.getItem('lastReadingPosition');
+      if (lastReadingPosition) {
+        const { surahNumber, ayahNumber } = JSON.parse(lastReadingPosition);
+        // Set the last Surah and Ayah
+        setLastSurah(surahNumber);
+        setLastAyah(ayahNumber);
+      }
+    } catch (error) {
+      console.error('Error loading last reading position:', error);
+    }
+  };
+
+  getLastReadingPosition();
+}, []);
+
 
 const HomeScreen = ({navigation}) => {
+  const [lastSurah, setLastSurah] = useState(null);
+const [lastAyah, setLastAyah] = useState(null);
+
+useEffect(() => {
+  const getLastReadingPosition = async () => {
+    try {
+      const lastReadingPosition = await AsyncStorage.getItem('lastReadingPosition');
+      if (lastReadingPosition) {
+        const { surahNumber, ayahNumber } = JSON.parse(lastReadingPosition);
+        // Set the last Surah and Ayah
+        setLastSurah(surahNumber);
+        setLastAyah(ayahNumber);
+      }
+    } catch (error) {
+      console.error('Error loading last reading position:', error);
+    }
+  };
+
+  getLastReadingPosition();
+}, []);
+
   return (
     <View style = {styles.container}>
     <View style = {styles.container1}>
@@ -15,8 +58,8 @@ const HomeScreen = ({navigation}) => {
         ></Image>
         <View style={{alignItems:'center'}}>
           <Text style={{color:'white', marginTop:12}} >Last Read</Text>
-          <Text style={{color:'white', marginTop:1, fontSize: '25'}}>Al-Faatiha</Text>
-          <Text style={{color:'white', marginTop:1}}>Verse No. 7</Text>
+          <Text style={{color:'white', marginTop:1, fontSize: '25'}}>{lastSurah}</Text>
+          <Text style={{color:'white', marginTop:1}}>{lastAyah}</Text>
         </View>
     </View>
 
@@ -55,10 +98,15 @@ const HomeScreen = ({navigation}) => {
            <Text style={{fontSize:20, fontWeight:'300', paddingTop: 15}}>Book Mark</Text>
           </View>
 
-          <View style = {styles.item}>
+          <TouchableOpacity
+             style = {styles.item}
+             onPress={()=>
+                    navigation.navigate('Settings')
+            }
+            >
            <Ionicons name="settings" size={60} color="black" />
            <Text style={{fontSize:20, fontWeight:'300', paddingTop: 15}}>Settings</Text>
-          </View>
+           </TouchableOpacity>
 
         </View>  
 

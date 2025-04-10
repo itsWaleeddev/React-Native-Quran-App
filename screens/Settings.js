@@ -1,46 +1,29 @@
-import {React, useContext, useEffect} from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
+import React, { useContext } from 'react';
+import { View, Text, Switch, StyleSheet } from 'react-native';
+import { LanguageContext } from '../LanguageContext';
 
-// import Context from "./context";
-
-// let {
-//   font,
-//   setFont
-// } = useContext(Context);
-
-export default function Settings({navigation}) {
-
-
-  useEffect(()=>{
-    console.log('I am in Setting Screen');
-    
-  },[])
-
-  const changFont=()=>{
-    console.log('changFont is called');
-    
-    global.font = 100;
-
-    //
-
-    // setFont(font);
-  }
+const Settings = () => {
+  const { language, toggleLanguage, showTafseer, toggleTafseer } = useContext(LanguageContext);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>⚙️ Settings</Text>
-          <TouchableOpacity style={styles.featureButton} onPress={() => changFont()}>
-            <Image 
-              source={{ uri: 'https://cdn-icons-png.flaticon.com/512/8332/8332365.png' }} 
-              style={styles.icon} 
-            />
-            <Text style={styles.buttonText}>Change Font</Text>
-          </TouchableOpacity>
+      <View style={styles.setting}>
+        <Text style={styles.label}>Language: {language}</Text>
+        <Switch value={language === 'english'} onValueChange={toggleLanguage} />
+      </View>
+
+      <View style={styles.setting}>
+        <Text style={styles.label}>Show Tafseer</Text>
+        <Switch value={showTafseer} onValueChange={toggleTafseer} />
+      </View>
     </View>
   );
-}
+};
+
+export default Settings;
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "#fff" },
-  text: { fontSize: 20, fontWeight: "bold" },
+  container: { flex: 1, padding: 20 },
+  setting: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 15 },
+  label: { fontSize: 16, color: 'black' }
 });
