@@ -44,7 +44,6 @@ useEffect(() => {
       console.error('Error loading last reading position:', error);
     }
   };
-
   getLastReadingPosition();
 }, []);
 
